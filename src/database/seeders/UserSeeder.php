@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     private const BATCH_SIZE = 1000;
     public function run()
     {
-        $this->deleteUsers();
+        $this->truncateUsers();
         $this->seedAdmins();
         $this->seedUsers();
     }
@@ -45,8 +45,10 @@ class UserSeeder extends Seeder
         }
     }
 
-    private function deleteUsers()
+    private function truncateUsers()
     {
-        DB::table('users')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        User::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

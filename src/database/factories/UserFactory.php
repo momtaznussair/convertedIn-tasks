@@ -34,7 +34,7 @@ class UserFactory extends Factory
         }
 
         if (is_null(static::$email_verified_at)) {
-            static::$email_verified_at = Carbon::now()->format('Y-m-d H:i:s');
+            static::$email_verified_at = Carbon::now()->toDateTimeString();
         }
         
         return [
