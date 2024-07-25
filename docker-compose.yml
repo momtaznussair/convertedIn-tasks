@@ -1,0 +1,66 @@
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - convertedin
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - convertedin
+
+  convertedin_npm:
+    image: node:current-alpine
+    container_name: convertedin_npm
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ["npm"]
+    working_dir: /var/www/html
+
+  mysql:
+        image: mysql:8
+        container_name: convertedin_mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: dev
+          MYSQL_DATABASE: convertedin_db
+          MYSQL_USER: dev
+          MYSQL_PASSWORD: dev
+          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
+        ports:
+          - "4470:3306"
+        volumes:
+          - ./mysql:/var/lib/mysql
+        networks:
+          - convertedin
+          
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 4488:80
+    networks:
+    - convertedin
+
+networks:
+  convertedin:
+  
