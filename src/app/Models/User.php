@@ -71,4 +71,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'assigned_to_id');
     }
+
+    /**
+     * Convert the model instance to an array suitable for bulk seeding.
+     *
+     * @return array
+     */
+    public function toBulkSeedingArray()
+    {
+        $array = parent::toArray();
+
+        // Include hidden attributes for seeding
+        $array['password'] = $this->password;
+        $array['email_verified_at'] = $this->email_verified_at;
+
+        return $array;
+    }
 }

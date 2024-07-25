@@ -21,8 +21,8 @@ class TaskTest extends TestCase
     public function it_has_an_assigned_to_user()
     {
         // Arrange
-        $assignee = User::factory()->create(['is_admin' => false]);
-        $assignor = User::factory()->create(['is_admin' => true]);
+        $assignee = User::factory()->create();
+        $assignor = User::factory()->admin()->create();
 
         $task = Task::factory()->create([
             'assigned_to_id' => $assignee->id,
@@ -44,8 +44,8 @@ class TaskTest extends TestCase
     public function it_has_an_assigned_by_user()
     {
         // Arrange
-        $assignee = User::factory()->create(['is_admin' => false]);
-        $assignor = User::factory()->create(['is_admin' => true]);
+        $assignee = User::factory()->create();
+        $assignor = User::factory()->admin()->create();
 
         $task = Task::factory()->create([
             'assigned_to_id' => $assignee->id,

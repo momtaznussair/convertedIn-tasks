@@ -20,8 +20,8 @@ class UserTest extends TestCase
     public function adminScope()
     {
         // Arrange: Create admin and non-admin users
-        $admin = User::factory()->create(['is_admin' => true]);
-        $nonAdmin = User::factory()->create(['is_admin' => false]);
+        $admin = User::factory()->admin()->create();
+        $nonAdmin = User::factory()->create();
 
         // Act: Retrieve users using the admin scope
         $admins = User::admin()->get();
@@ -41,8 +41,8 @@ class UserTest extends TestCase
     public function userScope()
     {
         // Arrange: Create admin and non-admin users
-        $admin = User::factory()->create(['is_admin' => true]);
-        $nonAdmin = User::factory()->create(['is_admin' => false]);
+        $admin = User::factory()->admin()->create();
+        $nonAdmin = User::factory()->create();
 
         // Act: Retrieve users using the user scope
         $users = User::user()->get();

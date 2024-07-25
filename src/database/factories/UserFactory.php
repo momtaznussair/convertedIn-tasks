@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -12,9 +13,14 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
+     * The current email_verified_at being used by the factory.
+     */
+    protected static ?string $email_verified_at = null;
+
+     /**
      * The current password being used by the factory.
      */
-    protected static ?string $password;
+    protected static ?string $password = null;
 
     /**
      * Define the model's default state.
@@ -23,11 +29,19 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        if (is_null(static::$password)) {
+            static::$password = Hash::make('password'); // Hash the password only once
+        }
+
+        if (is_null(static::$email_verified_at)) {
+            static::$email_verified_at = Carbon::now()->format('Y-m-d H:i:s');
+        }
+        
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'email_verified_at' => self::$email_verified_at,
+            'password' => static::$password,
             'remember_token' => Str::random(10),
         ];
     }
@@ -39,6 +53,16 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the model's is_admin should be true.
+     */
+    public function admin(): static
+    {
+        return $this->state([
+            'is_admin' => true,
         ]);
     }
 }
