@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Ensure Composer dependencies are up to date
-composer install
+composer install --dev
 
 # create .env file
 php -r "file_exists('.env') || copy('.env.example', '.env');"
