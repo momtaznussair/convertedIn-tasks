@@ -45,4 +45,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Scope a query to only include users of a admin type.
+     */
+    public function scopeAdmin(Builder $query): void
+    {
+        $query->where('is_admin', true);
+    }
+
+
+     /**
+     * Scope a query to only include users of a user type.
+     */
+    public function scopeUser(Builder $query): void
+    {
+        $query->where('is_admin', false);
+    }
 }
