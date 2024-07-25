@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\Cache;
 
 class TaskStatisticsService
 {
-    protected $cacheKey = 'top_users_task_count';
+    private const CACHE_KEY = 'top_users_task_count';
 
+    private const CACHE_DURATION= 1440; // Cache duration in minutes 60 * 24 (24 hours);
     private const USER_COUNT = 10;
-    protected $cacheDuration = 1440; // Cache duration in minutes 60 * 24 (24 hours)
 
     /**
      * Get the top users with task counts, using cache if available.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getTopUsersByTaskCount()
+    public static function getTopUsersByTaskCount()
     {
-        return Cache::remember($this->cacheKey, $this->cacheDuration, function () {
-            return $this->updateCache();
+        return Cache::remember(self::CACHE_KEY, self::CACHE_DURATION, function () {
+            return self::updateCache();
         });
     }
 
@@ -29,15 +29,15 @@ class TaskStatisticsService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function updateCache()
+    public static function updateCache()
     {
         $topUsers = User::has('tasks')
             ->withCount('tasks')
             ->orderBy('tasks_count', 'desc')
             ->take(self::USER_COUNT)
-            ->get();
+            ->get(self::USER_COUNT);
 
-        Cache::put($this->cacheKey, $topUsers, $this->cacheDuration);
+        Cache::put(self::CACHE_KEY, $topUsers, self::CACHE_DURATION);
 
         return $topUsers;
     }

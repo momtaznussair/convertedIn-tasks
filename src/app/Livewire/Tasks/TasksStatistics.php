@@ -11,9 +11,9 @@ class TasksStatistics extends Component
 {
     public $users;
 
-    public function mount(TaskStatisticsService $taskStatisticsService)
+    public function mount()
     {
-        $this->users = $taskStatisticsService->getTopUsersByTaskCount();
+        $this->users = TaskStatisticsService::getTopUsersByTaskCount();
     }
 
     public function render()
