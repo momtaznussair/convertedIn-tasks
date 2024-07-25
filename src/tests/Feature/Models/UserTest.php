@@ -2,9 +2,10 @@
 
 namespace Tests\Unit;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {
@@ -15,7 +16,8 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function testAdminScope()
+    #[Test]
+    public function adminScope()
     {
         // Arrange: Create admin and non-admin users
         $admin = User::factory()->create(['is_admin' => true]);
@@ -35,7 +37,8 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function testUserScope()
+    #[Test]
+    public function userScope()
     {
         // Arrange: Create admin and non-admin users
         $admin = User::factory()->create(['is_admin' => true]);
