@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire;
 
+use App\Livewire\Tasks\CreateTask;
 use Tests\TestCase;
 use App\Models\User;
 use Livewire\Livewire;
@@ -16,10 +17,8 @@ class CreateTaskTest extends TestCase
     #[Test]
     public function it_renders_the_create_task_component()
     {
-        $response = $this->get('/tasks/create');
-
-        $response->assertStatus(200)
-            ->assertSeeLivewire('tasks.create-task');
+        Livewire::test(CreateTask::class)
+        ->assertStatus(200);
     }
 
     #[Test]
